@@ -1,0 +1,45 @@
+﻿@model IEnumerable<DAL.Model.Narudzbe>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.NarudzbeID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Kupac)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Proizvod.Naziv)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.NarudzbeID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Kupac.Ime_prezime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Proizvod.Naziv)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { narudzbeID = item.NarudzbeID, proizvodID = item.ProizvodID, kupacID = item.KupacID }) |
+            @Html.ActionLink("Details", "Details", new { narudzbeID = item.NarudzbeID, proizvodID = item.ProizvodID, kupacID = item.KupacID }) |
+            @Html.ActionLink("Delete", "Delete", new { narudzbeID = item.NarudzbeID, proizvodID = item.ProizvodID, kupacID = item.KupacID })
+        </td>
+    </tr>
+}
+
+</table>
