@@ -112,11 +112,8 @@ namespace WebNarudzba.Controllers
         {
 
             Kupac kupac = await unitOfWork.Kupac.GetByIdAsync(id);
-            if (kupac == null)
-            {
-                return HttpNotFound();
-            }
-            return View(kupac);
+            await unitOfWork.Kupac.DeleteAsync(kupac);
+            return RedirectToAction("Index");
         }
 
         // POST: Kupac/Delete/5

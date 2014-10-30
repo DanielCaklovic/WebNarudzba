@@ -33,3 +33,5 @@ C:\Users\daniel\Documents\Visual Studio 2013\Project\BEKAP\WebNarudzba\DAL\bin\D
 C:\Users\daniel\Documents\Visual Studio 2013\Project\BEKAP\WebNarudzba\DAL\bin\Debug\Ninject.xml
 C:\Users\daniel\Documents\Visual Studio 2013\Project\BEKAP\WebNarudzba\DAL\obj\Debug\DAL.dll
 C:\Users\daniel\Documents\Visual Studio 2013\Project\BEKAP\WebNarudzba\DAL\obj\Debug\DAL.pdb
+C:\Users\daniel\Documents\Visual Studio 2013\Project\BEKAP\WebNarudzba\DAL\bin\Debug\DAL.dll.CodeAnalysisLog.xml
+C:\Users\daniel\Documents\Visual Studio 2013\Project\BEKAP\WebNarudzba\DAL\bin\Debug\DAL.dll.lastcodeanalysissucceeded

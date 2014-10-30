@@ -126,11 +126,8 @@ namespace WebNarudzba.Controllers
         {
 
             Proizvod proizvod = await unitOfWork.Proizvod.GetByIdAsync(id);
-            if (proizvod == null)
-            {
-                return HttpNotFound();
-            }
-            return View(proizvod);
+            await unitOfWork.Proizvod.DeleteAsync(proizvod);
+            return RedirectToAction("Index");
         }
 
         // POST: Proizvod/Delete/5
