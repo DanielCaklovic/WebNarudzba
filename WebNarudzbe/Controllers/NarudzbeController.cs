@@ -10,6 +10,8 @@ using System.Web.Mvc;
 using DAL.Model;
 using Repository.Repository;
 using Repository;
+using WebNarudzbe.Models;
+using AutoMapper;
 
 namespace WebNarudzba.Controllers
 {
@@ -17,11 +19,16 @@ namespace WebNarudzba.Controllers
     {
         private WebNarudzbaContext db = new WebNarudzbaContext();
 
-        // private NarudzbeRepository narudzbeRepository = new NarudzbeRepository(new WebNarudzbaContext());
-        // private UnitOfWork unitOfWork = new UnitOfWork();
+        ///<remarks>
+        /// Bez UoW - private GenericRepository<Kupac> genericRepository = new GenericRepository<Kupac>(new WebNarudzbaContext());
+        /// Hardcoding - private UnitOfWork unitOfWork = new UnitOfWork(); 
+        /// </remarks>
 
 
-        //Constructor injection
+
+        ///<remarks>
+        ///Constructor injection
+        /// </remarks>
         private readonly IUnitOfWork unitOfWork;
 
         public NarudzbeController(IUnitOfWork unitOfWork)
@@ -33,7 +40,9 @@ namespace WebNarudzba.Controllers
         // GET: Narudzbe
         public async Task<ActionResult> Index()
         {
-            return View(await unitOfWork.Narudzbe.GetNarudzbeAsync());
+            IList<Narudzbe> narudzbe = await unitOfWork.Narudzbe.GetNarudzbeAsync();
+            IList<NarudzbeDTO> narudzbeViewModel = Mapper.Map<IList<Narudzbe>, IList<NarudzbeDTO>>(narudzbe);
+            return View(narudzbeViewModel);
         }
 
         // GET: Narudzbe/Details/5
@@ -41,11 +50,15 @@ namespace WebNarudzba.Controllers
         {
 
             Narudzbe narudzbe = await unitOfWork.Narudzbe.GetNarudzbeByIdAsync(narudzbeID, proizvodID, kupacID);
+            NarudzbeDTO narudzbeViewModel = Mapper.Map<Narudzbe, NarudzbeDTO>(narudzbe);
             if (narudzbe == null)
             {
                 return HttpNotFound();
             }
-            return View(narudzbe);
+            ViewBag.KupacID = new SelectList(db.Kupac, "ID", "Ime");
+            ViewBag.ProizvodID = new SelectList(db.Proizvod, "ID", "Naziv");
+            
+            return View(narudzbeViewModel);
         }
 
         // GET: Narudzbe/Create
@@ -61,11 +74,12 @@ namespace WebNarudzba.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "NarudzbeID,ProizvodID,KupacID")] Narudzbe narudzbe)
+        public async Task<ActionResult> Create([Bind(Include = "NarudzbeID,ProizvodID,KupacID")] NarudzbeDTO narudzbe)
         {
             if (ModelState.IsValid)
             {
-                await unitOfWork.Narudzbe.InsertNarudzbeAsync(narudzbe);
+                Narudzbe narudzbeViewModel = Mapper.Map<NarudzbeDTO, Narudzbe>(narudzbe);
+                await unitOfWork.Narudzbe.InsertNarudzbeAsync(narudzbeViewModel);
                 return RedirectToAction("Index");
             }
 
@@ -79,13 +93,14 @@ namespace WebNarudzba.Controllers
         {
 
             Narudzbe narudzbe = await unitOfWork.Narudzbe.GetNarudzbeByIdAsync(narudzbeID, proizvodID, kupacID);
+            NarudzbeDTO narudzbeViewModel = Mapper.Map<Narudzbe, NarudzbeDTO>(narudzbe);
             if (narudzbe == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.KupacID = new SelectList(db.Kupac, "ID", "Ime", narudzbe.KupacID);
-            ViewBag.ProizvodID = new SelectList(db.Proizvod, "ID", "Naziv", narudzbe.ProizvodID);
-            return View(narudzbe);
+            ViewBag.KupacID = new SelectList(db.Kupac, "ID", "Ime", narudzbeViewModel.KupacID);
+            ViewBag.ProizvodID = new SelectList(db.Proizvod, "ID", "Naziv", narudzbeViewModel.ProizvodID);
+            return View(narudzbeViewModel);
         }
 
         // POST: Narudzbe/Edit/5
@@ -93,11 +108,12 @@ namespace WebNarudzba.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "NarudzbeID,ProizvodID,KupacID")] Narudzbe narudzbe)
+        public async Task<ActionResult> Edit([Bind(Include = "NarudzbeID,ProizvodID,KupacID")] NarudzbeDTO narudzbe)
         {
             if (ModelState.IsValid)
             {
-                await unitOfWork.Narudzbe.UpdateNarudzbeAsync(narudzbe);
+                Narudzbe narudzbeViewModel = Mapper.Map<NarudzbeDTO, Narudzbe>(narudzbe);
+                await unitOfWork.Narudzbe.UpdateNarudzbeAsync(narudzbeViewModel);
                 return RedirectToAction("Index");
             }
             ViewBag.KupacID = new SelectList(db.Kupac, "ID", "Ime", narudzbe.KupacID);
@@ -109,12 +125,8 @@ namespace WebNarudzba.Controllers
         public async Task<ActionResult> Delete(int narudzbeID, int proizvodID, int kupacID)
         {
 
-            Narudzbe narudzbe = await unitOfWork.Narudzbe.GetNarudzbeByIdAsync(narudzbeID, proizvodID, kupacID);
-            if (narudzbe == null)
-            {
-                return HttpNotFound();
-            }
-            return View(narudzbe);
+            await unitOfWork.Narudzbe.DeleteNarudzbeAsync(narudzbeID, proizvodID, kupacID);
+            return RedirectToAction("Index");
         }
 
         // POST: Narudzbe/Delete/5
@@ -131,9 +143,11 @@ namespace WebNarudzba.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                unitOfWork.Narudzbe.Dispose();
             }
             base.Dispose(disposing);
         }
+
+    
     }
 }

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebNarudzbe", "WebNarudzbe\WebNarudzbe.csproj", "{78FD967C-CF8B-4D86-AED8-4C8E72B687FA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceLayer", "WebNarudzbe\ServiceLayer.csproj", "{78FD967C-CF8B-4D86-AED8-4C8E72B687FA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebNarudzbe.Tests", "WebNarudzbe.Tests\WebNarudzbe.Tests.csproj", "{57EE524D-F671-4EA1-A724-6F21DF075124}"
 EndProject

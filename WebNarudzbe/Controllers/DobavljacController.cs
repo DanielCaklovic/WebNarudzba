@@ -10,6 +10,8 @@ using System.Web.Mvc;
 using DAL;
 using Repository.Repository;
 using Repository;
+using AutoMapper;
+using WebNarudzbe.Models;
 
 namespace WebNarudzba.Controllers
 {
@@ -17,10 +19,16 @@ namespace WebNarudzba.Controllers
     {
         private WebNarudzbaContext db = new WebNarudzbaContext();
 
-        //private GenericRepository<Dobavljac> genericRepository = new GenericRepository<Dobavljac>(new WebNarudzbaContext());
-        //private UnitOfWork unitOfWork = new UnitOfWork(); 
+        ///<remarks>
+        /// Bez UoW - private GenericRepository<Kupac> genericRepository = new GenericRepository<Kupac>(new WebNarudzbaContext());
+        /// Hardcoding - private UnitOfWork unitOfWork = new UnitOfWork(); 
+        /// </remarks>
+        
 
-        //Constructor injection
+        ///<remarks>
+        ///Constructor injection
+        /// </remarks>
+        
         private readonly IUnitOfWork unitOfWork;
 
         public DobavljacController(IUnitOfWork unitOfWork)
@@ -31,8 +39,30 @@ namespace WebNarudzba.Controllers
         // GET: Dobavljac
         public async Task<ActionResult> Index()
         {
-            //return View(await genericRepository.GetAll()); umjesto direktnog pristupa genericrepository-u, sada ide preko unitofwork
-            return View(await unitOfWork.Dobavljac.GetAll());
+            #region
+            ///<remarks>
+            ///return View(await genericRepository.GetAll()); umjesto direktnog pristupa genericrepository-u, sada ide preko unitofwork
+            ///GET: Mapping iz DAL.modela u serviceLayer.model.dobavljacDTO viewmodel
+            ///POST: Mapping iz dobavljacDTO viewmodela u DAL.model
+            ///</remarks>
+
+            ///<example>
+            ///Automapper radi upravo ovo:
+            ///Dobavljac dobavljac = await unitOfWork.Dobavljac.GetAll();
+            ///Dobavljac dobavljacDTO = new Dobavljac()
+            ///{
+            ///     adresa = dobavljac.adresa,
+            ///     naziv = dobavljac.naziv,
+            ///     telefon = dobavljac.telefon
+            ///};     
+            ///View(dobavljacDTO);
+            ///</example>
+            #endregion            
+
+            IList<Dobavljac> dobavljac = await unitOfWork.Dobavljac.GetAll();
+            IList<DobavljacDTO> dobavljacViewModel = Mapper.Map<IList<Dobavljac>,IList<DobavljacDTO>>(dobavljac);
+
+            return View(dobavljacViewModel);
 
         }
 
@@ -41,12 +71,26 @@ namespace WebNarudzba.Controllers
         {
 
             Dobavljac dobavljac = await unitOfWork.Dobavljac.GetByIdAsync(id);
+            DobavljacDTO dobavljacViewModel = Mapper.Map<Dobavljac, DobavljacDTO>(dobavljac);
             if (dobavljac == null)
             {
                 return HttpNotFound();
             }
-            return View(dobavljac);
+            return View(dobavljacViewModel);
         }
+
+        //// GET: Partial - Dobavljac/Details/5
+        //public async Task<ActionResult> PartialEdit(int id)
+        //{
+        //    Dobavljac dobavljac = await unitOfWork.Dobavljac.GetByIdAsync(id);
+        //    DobavljacDTO dobavljacViewModel = Mapper.Map<Dobavljac, DobavljacDTO>(dobavljac);
+        //    if (dobavljac == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return PartialView("PartialEdit", dobavljacViewModel);
+        //}
+
 
         // GET: Dobavljac/Create
         public ActionResult Create()
@@ -59,11 +103,13 @@ namespace WebNarudzba.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "ID,Naziv,Adresa,Telefon")] Dobavljac dobavljac)
+        public async Task<ActionResult> Create([Bind(Include = "ID,Naziv,Adresa,Telefon")] DobavljacDTO dobavljac)
         {
+
             if (ModelState.IsValid)
             {
-                await unitOfWork.Dobavljac.InsertAsync(dobavljac);
+                Dobavljac dobavljacViewModel = Mapper.Map<DobavljacDTO, Dobavljac>(dobavljac);
+                await unitOfWork.Dobavljac.InsertAsync(dobavljacViewModel);
                 return RedirectToAction("Index");
             }
 
@@ -75,11 +121,12 @@ namespace WebNarudzba.Controllers
         {
 
             Dobavljac dobavljac = await unitOfWork.Dobavljac.GetByIdAsync(id);
+            DobavljacDTO dobavljacViewModel = Mapper.Map<Dobavljac, DobavljacDTO>(dobavljac);
             if (dobavljac == null)
             {
                 return HttpNotFound();
             }
-            return View(dobavljac);
+            return View(dobavljacViewModel);
         }
 
         // POST: Dobavljac/Edit/5
@@ -87,11 +134,12 @@ namespace WebNarudzba.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ID,Naziv,Adresa,Telefon")] Dobavljac dobavljac)
+        public async Task<ActionResult> Edit([Bind(Include = "ID,Naziv,Adresa,Telefon")] DobavljacDTO dobavljac)
         {
             if (ModelState.IsValid)
             {
-                await unitOfWork.Dobavljac.UpdateAsync(dobavljac);
+                Dobavljac dobavljacViewModel = Mapper.Map<DobavljacDTO, Dobavljac>(dobavljac);
+                await unitOfWork.Dobavljac.UpdateAsync(dobavljacViewModel);
                 return RedirectToAction("Index");
             }
             return View(dobavljac);
@@ -100,13 +148,10 @@ namespace WebNarudzba.Controllers
         // GET: Dobavljac/Delete/5
         public async Task<ActionResult> Delete(int id)
         {
-
             Dobavljac dobavljac = await unitOfWork.Dobavljac.GetByIdAsync(id);
-            if (dobavljac == null)
-            {
-                return HttpNotFound();
-            }
-            return View(dobavljac);
+            await unitOfWork.Dobavljac.DeleteAsync(dobavljac);
+            return RedirectToAction("Index");
+        
         }
 
         // POST: Dobavljac/Delete/5
@@ -123,7 +168,7 @@ namespace WebNarudzba.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                unitOfWork.Dobavljac.Dispose();
             }
             base.Dispose(disposing);
         }

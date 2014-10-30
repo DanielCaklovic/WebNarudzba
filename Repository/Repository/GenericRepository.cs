@@ -8,13 +8,19 @@ using Repository.Interface;
 
 namespace Repository.Repository
 {
-    public class GenericRepository<TEntity>:IGenericRepository<TEntity> where TEntity : class
+    public class GenericRepository<TEntity>:IGenericRepository<TEntity> where TEntity : class 
     {
-        //TEntity - entitet/tablica iz modela, nasljeđuje class 
+        ///<remarks>
+        ///TEntity - entitet/tablica iz modela, nasljeđuje class 
+        /// </remarks>
+       
         private DbContext dbContext;
         private DbSet<TEntity> dbSet;
-
-        //Konstruktor za poziv u kontroleru, s obzirom na entitet pravi tablicu(dbset) pomoću koje se dalje manipulira podacima
+        
+        ///<remarks>
+        ///Konstruktor za poziv u kontroleru, s obzirom na entitet pravi tablicu(dbset) pomoću koje se dalje manipulira podacima
+        /// </remarks>
+              
         public GenericRepository(DbContext dbContext)
         {
             this.dbContext = dbContext;
@@ -48,5 +54,11 @@ namespace Repository.Repository
             dbSet.Remove(entity);
             await dbContext.SaveChangesAsync();
         }
+
+        public void Dispose()
+        {
+            dbContext.Dispose();
+        }
+        
     }
 }

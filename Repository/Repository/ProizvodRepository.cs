@@ -9,7 +9,9 @@ namespace Repository.Repository
 {
     public class ProizvodRepository:IProizvodRepository
     {
-        //Implementacija Business logike
+        ///<remarks>
+        ///Implementacija Business logike
+        /// </remarks>
         private WebNarudzbaContext context;
 
         public ProizvodRepository(WebNarudzbaContext context) 

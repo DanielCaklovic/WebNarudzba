@@ -11,9 +11,10 @@ namespace Repository
 {
     public class UnitOfWork:IDisposable,IUnitOfWork
     {
-       
-        //The unit of work class serves one purpose: to make sure that when you use multiple repositories, they share a single database context.
-        //That way, when a unit of work is complete you can call the SaveChanges method on that instance of the context and be assured that all related changes will be coordinated.
+        ///<summary>
+        ///The unit of work class serves one purpose: to make sure that when you use multiple repositories, they share a single database context.
+        ///That way, when a unit of work is complete you can call the SaveChanges method on that instance of the context and be assured that all related changes will be coordinated.
+        /// </summary>       
 
         private WebNarudzbaContext context;
 
@@ -23,8 +24,8 @@ namespace Repository
         }
         public void Dispose()
         {
-            this.Dispose();
-            GC.SuppressFinalize(this);
+            context.Dispose();
+            GC.SuppressFinalize(context);
         }
         public Interface.IGenericRepository<Dobavljac> Dobavljac
         {
@@ -45,5 +46,7 @@ namespace Repository
         {
             get { return new NarudzbeRepository(context); }
         }
+
+     
     }
 }

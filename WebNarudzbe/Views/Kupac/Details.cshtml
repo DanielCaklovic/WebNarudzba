@@ -1,67 +1,41 @@
-﻿@model DAL.Model.Kupac
+﻿@model WebNarudzbe.Models.KupacDTO
 @{
     ViewBag.Title = "Detalji o kupcu";
 }
 
-<h2>Detalji o kupcu</h2>
+
+<div id="partialDetails">
+    @Html.Partial("PartialDetails", Model)
+</div>
+
+<div id="partialEdit" style="display:none">
+    @Html.Partial("PartialEdit", Model)
+</div>
 
 <div>
-
-    <hr />
-    <dl class="dl-horizontal">
-        
-        <dt>
-            @Html.DisplayNameFor(model => model.Ime_prezime)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Ime_prezime)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Adresa)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Adresa)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Telefon)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Telefon)
-        </dd>
-        <br />
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Narudzbe)
-        </dt>
-
-        <dd>
-            <table class="table">
-                <tr>
-                    <th>Broj narudžbe</th>
-                    <th>Proizvod</th>
-                </tr>
-                @foreach (var item in Model.Narudzbe)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelitem => item.NarudzbeID)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelitem => item.Proizvod.Naziv)
-                        </td>
-
-                    </tr>
-                }
-            </table>
-        </dd>
-    </dl>
+    <input type="button" value="Edit" id="Switch" onclick="switchtoview()" />
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+
+<script type="text/javascript">
+    var isDetailShown = new Boolean(true);
+    function switchtoview() {
+        var details = $('#partialDetails');
+        var edit = $('#partialEdit');
+        var button = $('#Switch');
+
+        if (isDetailShown) {
+            $('#Switch').val('Details');
+            $('#partialDetails').hide();
+            edit.show();
+            isDetailShown = false;
+        }
+        else
+        {
+            $('#Switch').val('Edit');
+            details.show();
+            $('#partialEdit').hide();
+            isDetailShown = true;
+
+        }
+    }
+</script>

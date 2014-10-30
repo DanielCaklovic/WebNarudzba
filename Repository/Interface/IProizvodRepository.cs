@@ -9,8 +9,10 @@ namespace Repository.Interface
 {
     public interface IProizvodRepository:IDisposable
     {
-        //Deklaracija metoda za CRUD operacije
-        //Repository - veza između DAL i BLL
+        ///<summary>
+        ///Deklaracija metoda za CRUD operacije
+        ///Repository - veza između DAL i BLL
+        /// </summary>
         IEnumerable<Proizvod> GetProizvodi();
         Proizvod GetProizvodById(int proizvodID);
         void InsertProizvod(Proizvod proizvod);

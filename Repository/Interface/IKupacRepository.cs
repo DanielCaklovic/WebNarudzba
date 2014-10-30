@@ -10,8 +10,11 @@ namespace Repository.Interface
 {
     public interface IKupacRepository:IDisposable
     {
-        //Deklaracija metoda za CRUD operacije
-        //Repository - veza između DAL i BLL
+        ///<summary>
+        ///Deklaracija metoda za CRUD operacije
+        ///Repository - veza između DAL i BLL
+        /// </summary>
+       
         IEnumerable<Kupac> GetKupci();
         Kupac GetKupacByID(int kupacID);
         void InsertKupac(Kupac kupac);

@@ -12,13 +12,28 @@ using Repository;
 using DAL;
 using DAL.Model;
 using System.Threading.Tasks;
+using AutoMapper;
+using Repository.Interface;
+
+using WebNarudzba.Controllers;
 
 namespace WebNarudzbe.Tests.Controllers
 {
     [TestClass]
     public class HomeControllerTest
     {
-        private Mock<IUnitOfWork> IUnitOfWork = new Mock<IUnitOfWork>();
+        private Mock<IUnitOfWork> IUnitOfWork;
+        private Mock<IGenericRepository<Dobavljac>> genericRepository;
+
+        private DobavljacController dobavljacController;
+
+        [TestInitialize]
+        public void Init() 
+        {
+                IUnitOfWork = new Mock<IUnitOfWork>();
+                
+
+        }
 
         [TestMethod]
         public void Index()
@@ -60,36 +75,60 @@ namespace WebNarudzbe.Tests.Controllers
         }
 
         [TestMethod]
-        public void TestDobavljac()
+        public void TestControllerDobavljac()
         {
+            //Arrange
+            dobavljacController = new DobavljacController(IUnitOfWork.Object);
             Dobavljac dobavljac = new Dobavljac();
-
             dobavljac.ID = 1;
             dobavljac.Adresa = "test adress";
             dobavljac.Naziv = "test naziv";
             dobavljac.Telefon = "test broj";
-
-
             //TASK.FromResult == ReturnsAsync
-            var test1 = IUnitOfWork.Setup(x => x.Dobavljac.GetByIdAsync(1)).Returns(Task.FromResult(dobavljac));
-            var test2 = IUnitOfWork.Setup(x => x.Dobavljac.GetByIdAsync(10)).ReturnsAsync(dobavljac);
-        //    Assert.IsNull(test2);
-            Assert.IsNotNull(test1);
+            IUnitOfWork.Setup(x => x.Dobavljac.GetByIdAsync(dobavljac.ID)).ReturnsAsync(dobavljac);
 
+            //Act
+            var dobavljacDetailResult = dobavljacController.Details(dobavljac.ID);
+
+            //Assert
+            Assert.IsInstanceOfType(dobavljacDetailResult, typeof(Task<ActionResult>));
+            Assert.AreEqual(1,dobavljacDetailResult.Id);
+ 
+
+
+            
+           
+          
+
+          
         }
 
         [TestMethod]
-        public void TestProizvod()
+        public void TestInsertDobavljac()
         {
-            Proizvod proizvod = new Proizvod();
+            //Arrange
+            dobavljacController = new DobavljacController(IUnitOfWork.Object);
+            Dobavljac dobavljac = new Dobavljac();
+            dobavljac.ID = 100;
+            dobavljac.Adresa = "test adress";
+            dobavljac.Naziv = "test naziv";
+            dobavljac.Telefon = "test broj";
+            //TASK.FromResult == ReturnsAsync
+            IUnitOfWork.Setup(x => x.Dobavljac.InsertAsync(dobavljac)).Returns(Task.FromResult(dobavljac));
 
-            proizvod.ID = 100;
-            proizvod.Naziv = "testproizvod";
+            //Act
+            var dobavljacCreateResult = dobavljacController.Create();
 
-            IUnitOfWork.Setup(x => x.Proizvod.GetByIdAsync(1)).Returns(Task.FromResult(proizvod));
-
+            //Assert
+            Assert.IsInstanceOfType(dobavljacCreateResult, typeof(ActionResult));
+           
+          
+            
+      
 
         }
+
+
 
     }
 }

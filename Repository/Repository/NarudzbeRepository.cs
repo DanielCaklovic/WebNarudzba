@@ -10,7 +10,10 @@ namespace Repository.Repository
 {
     public class NarudzbeRepository:INarudzbeRepository
     {
-        //Implementacija Business logike
+        ///<remarks>
+        ///Implementacija Business logike
+        /// </remarks>
+      
         private WebNarudzbaContext context;
 
         public NarudzbeRepository(WebNarudzbaContext context)
@@ -56,7 +59,7 @@ namespace Repository.Repository
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            context.Dispose();
         }
     }
 }

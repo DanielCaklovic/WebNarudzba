@@ -1,42 +1,44 @@
-﻿@model DAL.Dobavljac
+﻿@model WebNarudzbe.Models.DobavljacDTO
 
 @{
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+
+
+<div id="partialDetails">
+@Html.Partial("PartialDetails", Model)
+</div>
+
+<div id="partialEdit" style="display:none">
+@Html.Partial("PartialEdit", Model)
+</div>
 
 <div>
-    <h4>Dobavljac</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Naziv)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Naziv)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Adresa)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Adresa)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Telefon)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Telefon)
-        </dd>
-
-    </dl>
+    <input type="button" value="Edit" id="Switch" onclick="switchtoview()" />
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+
+<script type="text/javascript">
+    var isDetailShown = new Boolean(true);
+    function switchtoview() {
+        var details = $('#partialDetails');
+        var edit = $('#partialEdit');
+        var button = $('#Switch');
+             
+        if (isDetailShown) {
+            $('#Switch').val('Details');
+            $('#partialDetails').hide();
+            edit.show();
+            isDetailShown = false;
+        }
+        else
+        {
+            $('#Switch').val('Edit');
+            details.show();
+            $('#partialEdit').hide();
+            isDetailShown = true;
+          
+        }
+    }
+</script>
+

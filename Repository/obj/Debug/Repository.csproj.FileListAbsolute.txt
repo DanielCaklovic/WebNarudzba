@@ -22,3 +22,15 @@ C:\Users\daniel\Documents\Visual Studio 2013\Project\WebNarudzbe\Repository\bin\
 C:\Users\daniel\Documents\Visual Studio 2013\Project\WebNarudzbe\Repository\obj\Debug\Repository.csprojResolveAssemblyReference.cache
 C:\Users\daniel\Documents\Visual Studio 2013\Project\WebNarudzbe\Repository\obj\Debug\Repository.dll
 C:\Users\daniel\Documents\Visual Studio 2013\Project\WebNarudzbe\Repository\obj\Debug\Repository.pdb
+C:\Users\daniel\Documents\Visual Studio 2013\Project\BEKAP\WebNarudzba\Repository\bin\Debug\Repository.dll.config
+C:\Users\daniel\Documents\Visual Studio 2013\Project\BEKAP\WebNarudzba\Repository\bin\Debug\Repository.dll
+C:\Users\daniel\Documents\Visual Studio 2013\Project\BEKAP\WebNarudzba\Repository\bin\Debug\Repository.pdb
+C:\Users\daniel\Documents\Visual Studio 2013\Project\BEKAP\WebNarudzba\Repository\bin\Debug\DAL.dll
+C:\Users\daniel\Documents\Visual Studio 2013\Project\BEKAP\WebNarudzba\Repository\bin\Debug\EntityFramework.dll
+C:\Users\daniel\Documents\Visual Studio 2013\Project\BEKAP\WebNarudzba\Repository\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\daniel\Documents\Visual Studio 2013\Project\BEKAP\WebNarudzba\Repository\bin\Debug\DAL.pdb
+C:\Users\daniel\Documents\Visual Studio 2013\Project\BEKAP\WebNarudzba\Repository\bin\Debug\EntityFramework.xml
+C:\Users\daniel\Documents\Visual Studio 2013\Project\BEKAP\WebNarudzba\Repository\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\daniel\Documents\Visual Studio 2013\Project\BEKAP\WebNarudzba\Repository\obj\Debug\Repository.csprojResolveAssemblyReference.cache
+C:\Users\daniel\Documents\Visual Studio 2013\Project\BEKAP\WebNarudzba\Repository\obj\Debug\Repository.dll
+C:\Users\daniel\Documents\Visual Studio 2013\Project\BEKAP\WebNarudzba\Repository\obj\Debug\Repository.pdb

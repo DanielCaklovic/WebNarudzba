@@ -10,17 +10,23 @@ using System.Web.Mvc;
 using DAL.Model;
 using Repository.Repository;
 using Repository;
+using WebNarudzbe.Models;
+using AutoMapper;
 
 namespace WebNarudzba.Controllers
 {
     public class KupacController : Controller
     {
         private WebNarudzbaContext db = new WebNarudzbaContext();
+        ///<remarks>
+        /// Bez UoW - private GenericRepository<Kupac> genericRepository = new GenericRepository<Kupac>(new WebNarudzbaContext());
+        /// Hardcoding - private UnitOfWork unitOfWork = new UnitOfWork(); 
+        /// </remarks>
 
-        // private GenericRepository<Kupac> genericRepository = new GenericRepository<Kupac>(new WebNarudzbaContext());
-        //private UnitOfWork unitOfWork = new UnitOfWork();
 
-        //Constructor injection
+        ///<remarks>
+        ///Constructor injection
+        /// </remarks>
         private readonly IUnitOfWork unitOfWork;
 
         public KupacController(IUnitOfWork unitOfWork)
@@ -31,7 +37,9 @@ namespace WebNarudzba.Controllers
         // GET: Kupac
         public async Task<ActionResult> Index()
         {
-            return View(await unitOfWork.Kupac.GetAll());
+            IList<Kupac> kupac = await unitOfWork.Kupac.GetAll();
+            IList<KupacDTO> kupacViewModel = Mapper.Map<IList<Kupac>, IList<KupacDTO>>(kupac);
+            return View(kupacViewModel);
         }
 
         // GET: Kupac/Details/5
@@ -39,11 +47,12 @@ namespace WebNarudzba.Controllers
         {
 
             Kupac kupac = await unitOfWork.Kupac.GetByIdAsync(id);
+            KupacDTO kupacViewModel = Mapper.Map<Kupac, KupacDTO>(kupac);
             if (kupac == null)
             {
                 return HttpNotFound();
             }
-            return View(kupac);
+            return View(kupacViewModel);
         }
 
         // GET: Kupac/Create
@@ -57,11 +66,12 @@ namespace WebNarudzba.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "ID,Ime,Prezime,Adresa,Telefon")] Kupac kupac)
+        public async Task<ActionResult> Create([Bind(Include = "ID,Ime,Prezime,Adresa,Telefon")] KupacDTO kupac)
         {
             if (ModelState.IsValid)
             {
-                await unitOfWork.Kupac.InsertAsync(kupac);
+                Kupac kupacViewModel = Mapper.Map<KupacDTO, Kupac>(kupac);
+                await unitOfWork.Kupac.InsertAsync(kupacViewModel);
                 return RedirectToAction("Index");
             }
 
@@ -73,11 +83,12 @@ namespace WebNarudzba.Controllers
         {
 
             Kupac kupac = await unitOfWork.Kupac.GetByIdAsync(id);
+            KupacDTO kupacViewModel = Mapper.Map<Kupac, KupacDTO>(kupac);
             if (kupac == null)
             {
                 return HttpNotFound();
             }
-            return View(kupac);
+            return View(kupacViewModel);
         }
 
         // POST: Kupac/Edit/5
@@ -85,11 +96,12 @@ namespace WebNarudzba.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ID,Ime,Prezime,Adresa,Telefon")] Kupac kupac)
+        public async Task<ActionResult> Edit([Bind(Include = "ID,Ime,Prezime,Adresa,Telefon")] KupacDTO kupac)
         {
             if (ModelState.IsValid)
             {
-                await unitOfWork.Kupac.UpdateAsync(kupac);
+                Kupac kupacViewModel = Mapper.Map<KupacDTO, Kupac>(kupac);
+                await unitOfWork.Kupac.UpdateAsync(kupacViewModel);
                 return RedirectToAction("Index");
             }
             return View(kupac);
@@ -121,7 +133,7 @@ namespace WebNarudzba.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                unitOfWork.Kupac.Dispose();
             }
             base.Dispose(disposing);
         }

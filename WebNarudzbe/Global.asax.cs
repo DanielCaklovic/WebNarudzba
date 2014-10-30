@@ -7,6 +7,7 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using DAL;
 using System.Data.Entity;
+using WebNarudzbe.Mappings;
 
 namespace WebNarudzbe
 {
@@ -14,12 +15,17 @@ namespace WebNarudzbe
     {
         protected void Application_Start()
         {
-             //var dbContext = new WebNarudzbaContext().Database;
-            //dbContext.Delete();
-
-            //Kreiraj bazu ako ne postoji - po shemi iz WebNarudzbaContext
+            ///<c>
+            ///DELETE db
+            ///var dbContext = new WebNarudzbaContext().Database;
+            ///dbContext.Delete();
+            ///</c>
+             
+            ///<remarks>
+            ///Kreiraj bazu ako ne postoji - po shemi iz WebNarudzbaContext
+            ///</remarks>
             Database.SetInitializer(new CreateDatabaseIfNotExists<WebNarudzbaContext>());
-            //Database.SetInitializer<WebNarudzbaContext>(null);
+            AutoMapperConfig.Configure();
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);

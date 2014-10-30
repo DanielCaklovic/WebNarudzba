@@ -15,5 +15,7 @@ namespace Repository
         IGenericRepository<Kupac> Kupac { get; }
         IGenericRepository<Proizvod> Proizvod { get; }
         INarudzbeRepository Narudzbe { get; }
+        
+        
     }
 }

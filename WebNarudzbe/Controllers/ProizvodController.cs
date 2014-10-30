@@ -10,6 +10,9 @@ using System.Web.Mvc;
 using DAL.Model;
 using Repository.Repository;
 using Repository;
+using AutoMapper;
+using WebNarudzbe.Mappings;
+using WebNarudzbe.Models;
 
 namespace WebNarudzba.Controllers
 {
@@ -17,10 +20,15 @@ namespace WebNarudzba.Controllers
     {
         private WebNarudzbaContext db = new WebNarudzbaContext();
 
-        // private GenericRepository<Proizvod> genericRepository = new GenericRepository<Proizvod>(new WebNarudzbaContext());
-        //  private UnitOfWork unitOfWork = new UnitOfWork();
+        ///<remarks>
+        /// Bez UoW - private GenericRepository<Kupac> genericRepository = new GenericRepository<Kupac>(new WebNarudzbaContext());
+        /// Hardcoding - private UnitOfWork unitOfWork = new UnitOfWork(); 
+        /// </remarks>
 
-        //Constructor injection
+
+        ///<remarks>
+        ///Constructor injection
+        /// </remarks>
         private readonly IUnitOfWork unitOfWork;
 
         public ProizvodController(IUnitOfWork unitOfWork)
@@ -32,10 +40,14 @@ namespace WebNarudzba.Controllers
         // GET: Proizvod
         public async Task<ActionResult> Index()
         {
-            //var proizvod = db.Proizvod.Include(p => p.Dobavljac);
+            ///<c>
+            ///var proizvod = db.Proizvod.Include(p => p.Dobavljac);
+            ///return View(await proizvod.ToListAsync());
+            ///</c>
 
-            //return View(await proizvod.ToListAsync());
-            return View(await unitOfWork.Proizvod.GetAll());
+            IList<Proizvod> proizvod = await unitOfWork.Proizvod.GetAll();
+            IList<ProizvodDTO> proizvodViewModel = Mapper.Map<IList<Proizvod>, IList<ProizvodDTO>>(proizvod);
+            return View(proizvodViewModel);
         }
 
         // GET: Proizvod/Details/5
@@ -43,11 +55,13 @@ namespace WebNarudzba.Controllers
         {
 
             Proizvod proizvod = await unitOfWork.Proizvod.GetByIdAsync(id);
+            ProizvodDTO proizvodViewModel = Mapper.Map<Proizvod, ProizvodDTO>(proizvod);
             if (proizvod == null)
             {
                 return HttpNotFound();
             }
-            return View(proizvod);
+            ViewBag.Dobavljac_ID = new SelectList(db.Dobavljac, "ID", "Naziv", proizvod.Dobavljac_ID);
+            return View(proizvodViewModel);
         }
 
         // GET: Proizvod/Create
@@ -62,12 +76,12 @@ namespace WebNarudzba.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "ID,Naziv,Cijena,Dobavljac_ID")] Proizvod proizvod)
+        public async Task<ActionResult> Create([Bind(Include = "ID,Naziv,Cijena,Dobavljac_ID")] ProizvodDTO proizvod)
         {
             if (ModelState.IsValid)
             {
-                await unitOfWork.Proizvod.InsertAsync(proizvod);
-                await db.SaveChangesAsync();
+                Proizvod proizvodViewModel = Mapper.Map<ProizvodDTO, Proizvod>(proizvod);
+                await unitOfWork.Proizvod.InsertAsync(proizvodViewModel);
                 return RedirectToAction("Index");
             }
 
@@ -80,12 +94,13 @@ namespace WebNarudzba.Controllers
         {
 
             Proizvod proizvod = await unitOfWork.Proizvod.GetByIdAsync(id);
+            ProizvodDTO proizvodViewModel = Mapper.Map<Proizvod, ProizvodDTO>(proizvod);
             if (proizvod == null)
             {
                 return HttpNotFound();
             }
             ViewBag.Dobavljac_ID = new SelectList(db.Dobavljac, "ID", "Naziv", proizvod.Dobavljac_ID);
-            return View(proizvod);
+            return View(proizvodViewModel);
         }
 
         // POST: Proizvod/Edit/5
@@ -93,12 +108,13 @@ namespace WebNarudzba.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ID,Naziv,Cijena,Dobavljac_ID")] Proizvod proizvod)
+        public async Task<ActionResult> Edit([Bind(Include = "ID,Naziv,Cijena,Dobavljac_ID")] ProizvodDTO proizvod)
         {
             if (ModelState.IsValid)
             {
-                await unitOfWork.Proizvod.UpdateAsync(proizvod);
-
+                
+                Proizvod proizvodViewModel = Mapper.Map<ProizvodDTO, Proizvod>(proizvod);
+                await unitOfWork.Proizvod.UpdateAsync(proizvodViewModel);
                 return RedirectToAction("Index");
             }
             ViewBag.Dobavljac_ID = new SelectList(db.Dobavljac, "ID", "Naziv", proizvod.Dobavljac_ID);
@@ -132,7 +148,7 @@ namespace WebNarudzba.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                unitOfWork.Proizvod.Dispose();
             }
             base.Dispose(disposing);
         }

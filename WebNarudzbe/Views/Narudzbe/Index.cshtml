@@ -1,4 +1,4 @@
-﻿@model IEnumerable<DAL.Model.Narudzbe>
+﻿@model IEnumerable<WebNarudzbe.Models.NarudzbeDTO>
 
 @{
     ViewBag.Title = "Index";
@@ -37,9 +37,14 @@
         <td>
             @Html.ActionLink("Edit", "Edit", new { narudzbeID = item.NarudzbeID, proizvodID = item.ProizvodID, kupacID = item.KupacID }) |
             @Html.ActionLink("Details", "Details", new { narudzbeID = item.NarudzbeID, proizvodID = item.ProizvodID, kupacID = item.KupacID }) |
-            @Html.ActionLink("Delete", "Delete", new { narudzbeID = item.NarudzbeID, proizvodID = item.ProizvodID, kupacID = item.KupacID })
+            @Ajax.ActionLink("Delete", "Delete", new { narudzbeID = item.NarudzbeID, proizvodID = item.ProizvodID, kupacID = item.KupacID }, new AjaxOptions { OnSuccess = "success()" })
         </td>
     </tr>
 }
 
 </table>
+<script type="text/javascript">
+    function success() {
+        alert("Zapis obrisan");
+    }
+</script>

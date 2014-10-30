@@ -10,24 +10,38 @@ namespace Repository
 {
     public interface IDobavljacRepository:IDisposable
     {
+        /// <summary>
+        /// Async metode 
+        /// Task Represents an asynchronous operation that can return a value.
+        /// </summary>
 
-        //Deklaracija metoda za CRUD operacije
-        //Repository - veza između DAL i BLL
-        //IEnumerable<Dobavljac> GetDobavljaci();
-        //Dobavljac GetDobavljacByID(int dobavljacID);
-        //void InsertDobavljac(Dobavljac dobavljac);
-        //void DeleteDobavljac(int dobavljacID);
-        //void UpdateDobavljac(Dobavljac dobavljac);
-        //void Save();
-
-        //Async metode 
-        //Task Represents an asynchronous operation that can return a value.
-        Task<List<Dobavljac>> GetAsyncDobavljaci(); //Index
+        
+        ///<remarks>
+        ///CRUD - create(insert),read(get),update,delete
+        ///</remarks>
+        Task<List<Dobavljac>> GetAsyncDobavljaci(); 
         Task<Dobavljac> GetAsyncDobavljacByID(int dobavljacID);
-        Task InsertAsyncDobavljac(Dobavljac dobavljac); //Create
-        Task DeleteAsyncDobavljac(int dobavljacID); //Delete
-        Task UpdateAsyncDobavljac(Dobavljac dobavljac); //Edit
+        Task InsertAsyncDobavljac(Dobavljac dobavljac); 
+       
+        Task DeleteAsyncDobavljac(int dobavljacID); 
+        
+        Task UpdateAsyncDobavljac(Dobavljac dobavljac);
+       
         Task SaveAsyncDobavljac();
+
+        
+        ///<summary>
+        ///Deklaracija metoda za CRUD operacije
+        ///Repository - veza između DAL i BLL
+        ///IEnumerable<Dobavljac> GetDobavljaci();
+        ///Dobavljac GetDobavljacByID(int dobavljacID);
+        ///void InsertDobavljac(Dobavljac dobavljac);
+        ///void DeleteDobavljac(int dobavljacID);
+        ///void UpdateDobavljac(Dobavljac dobavljac);
+        ///void Save();
+        ///</summary>
+
+        
 
     }
 }

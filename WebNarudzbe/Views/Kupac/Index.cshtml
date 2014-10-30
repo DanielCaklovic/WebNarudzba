@@ -1,4 +1,4 @@
-﻿@model IEnumerable<DAL.Model.Kupac>
+﻿@model IEnumerable<WebNarudzbe.Models.KupacDTO>
 
 @{
     ViewBag.Title = "Index";
@@ -43,9 +43,14 @@
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
             @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+            @Ajax.ActionLink("Delete", "Delete", new { id = item.ID }, new AjaxOptions { OnSuccess = "success()" })
         </td>
     </tr>
 }
 
 </table>
+<script type="text/javascript">
+    function success() {
+        alert("Zapis obrisan");
+    }
+</script>

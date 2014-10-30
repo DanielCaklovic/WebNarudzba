@@ -10,8 +10,10 @@ namespace Repository
 {
     public class DobavljacRepository:IDobavljacRepository
     {
-
-        //Implementacija Business logike
+        ///<remarks>
+        ///Implementacija Business logike
+        /// </remarks>
+        
         private WebNarudzbaContext context;
 
         public DobavljacRepository(WebNarudzbaContext context)
@@ -26,7 +28,10 @@ namespace Repository
             GC.SuppressFinalize(this);
         }
 
-        //ASYNC - AWAIT
+        ///<remarks>
+        ///ASYNC - AWAIT
+        /// </remarks>
+        
         public async Task<List<Dobavljac>> GetAsyncDobavljaci()
         {
             return await context.Dobavljac.ToListAsync();

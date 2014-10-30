@@ -9,7 +9,10 @@ namespace Repository.Repository
 {
     public class KupacRepository:IKupacRepository
     {
-        //Implementacija Business logike
+        ///<remarks>
+        ///Implementacija Business logike
+        /// </remarks>
+        
         private WebNarudzbaContext context;
 
         public KupacRepository(WebNarudzbaContext context) 

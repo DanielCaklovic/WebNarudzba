@@ -1,0 +1,42 @@
+﻿@model WebNarudzbe.Models.NarudzbeDTO
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Narudzbe</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.NarudzbeID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NarudzbeID)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Kupac)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Kupac.Ime_prezime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Proizvod.Naziv)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Proizvod.Naziv)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    
+    @Html.ActionLink("Back to List", "Index")
+</p>
+
