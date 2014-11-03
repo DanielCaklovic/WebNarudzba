@@ -17,7 +17,7 @@ namespace WebNarudzba.Controllers
 {
     public class DobavljacController : Controller
     {
-        private WebNarudzbaContext db = new WebNarudzbaContext();
+        //private WebNarudzbaContext db = new WebNarudzbaContext();
         
 
         ///<remarks>
@@ -65,6 +65,7 @@ namespace WebNarudzba.Controllers
             IList<Dobavljac> dobavljac = await dobavljacRepository.GetDobavljaciAsync();
             IList<DobavljacDTO> dobavljacViewModel = Mapper.Map<IList<Dobavljac>,IList<DobavljacDTO>>(dobavljac);
 
+            
             return View(dobavljacViewModel);
 
         }
@@ -113,6 +114,7 @@ namespace WebNarudzba.Controllers
             {
                 Dobavljac dobavljacViewModel = Mapper.Map<DobavljacDTO, Dobavljac>(dobavljac);
                 await dobavljacRepository.InsertDobavljacAsync(dobavljacViewModel);
+                await unitOfWork.Dobavljac.SaveAsync();
                 return RedirectToAction("Index");
             }
 
@@ -143,6 +145,7 @@ namespace WebNarudzba.Controllers
             {
                 Dobavljac dobavljacViewModel = Mapper.Map<DobavljacDTO, Dobavljac>(dobavljac);
                 await dobavljacRepository.UpdateDobavljacAsync(dobavljacViewModel);
+                await unitOfWork.Dobavljac.SaveAsync();
                 return RedirectToAction("Index");
             }
             return View(dobavljac);
@@ -162,6 +165,7 @@ namespace WebNarudzba.Controllers
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
             await dobavljacRepository.DeleteDobavljacAsync(id);
+            await unitOfWork.Dobavljac.SaveAsync();
             return RedirectToAction("Index");
         }
 

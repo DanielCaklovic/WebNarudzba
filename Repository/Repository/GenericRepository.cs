@@ -59,6 +59,12 @@ namespace Repository.Repository
         {
             dbContext.Dispose();
         }
-        
+
+
+
+        public async Task SaveAsync()
+        {
+            await dbContext.SaveChangesAsync();
+        }
     }
 }

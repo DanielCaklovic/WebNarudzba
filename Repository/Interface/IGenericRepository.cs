@@ -22,5 +22,6 @@ namespace Repository.Interface
         Task InsertAsync(TEntity entity);
         Task UpdateAsync(TEntity entity);
         Task DeleteAsync(TEntity entity);
+        Task SaveAsync();
     }
 }

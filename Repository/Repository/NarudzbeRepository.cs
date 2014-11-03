@@ -37,6 +37,7 @@ namespace Repository.Repository
         {
             context.Narudzbe.Add(narudzbe);
             await SaveNarudzbeAsync();
+
         }
 
         public async Task DeleteNarudzbeAsync(int NarudzbeID, int ProizvodID, int KupacID)

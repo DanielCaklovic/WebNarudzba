@@ -83,6 +83,7 @@ namespace WebNarudzba.Controllers
             {
                 Narudzbe narudzbeViewModel = Mapper.Map<NarudzbeDTO, Narudzbe>(narudzbe);
                 await narudzbeRepository.InsertNarudzbeAsync(narudzbeViewModel);
+                await unitOfWork.Narudzbe.SaveNarudzbeAsync();
                 return RedirectToAction("Index");
             }
 
@@ -117,6 +118,7 @@ namespace WebNarudzba.Controllers
             {
                 Narudzbe narudzbeViewModel = Mapper.Map<NarudzbeDTO, Narudzbe>(narudzbe);
                 await narudzbeRepository.UpdateNarudzbeAsync(narudzbeViewModel);
+                await unitOfWork.Narudzbe.SaveNarudzbeAsync();
                 return RedirectToAction("Index");
             }
             ViewBag.KupacID = new SelectList(db.Kupac, "ID", "Ime", narudzbe.KupacID);
@@ -139,6 +141,7 @@ namespace WebNarudzba.Controllers
         {
 
             await narudzbeRepository.DeleteNarudzbeAsync(narudzbeID, proizvodID, kupacID);
+            await unitOfWork.Narudzbe.SaveNarudzbeAsync();
             return RedirectToAction("Index");
         }
 

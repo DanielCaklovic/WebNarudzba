@@ -75,6 +75,7 @@ namespace WebNarudzba.Controllers
             {
                 Kupac kupacViewModel = Mapper.Map<KupacDTO, Kupac>(kupac);
                 await kupacRepository.InsertKupacAsync(kupacViewModel);
+                await unitOfWork.Kupac.SaveAsync();
                 return RedirectToAction("Index");
             }
 
@@ -105,6 +106,7 @@ namespace WebNarudzba.Controllers
             {
                 Kupac kupacViewModel = Mapper.Map<KupacDTO, Kupac>(kupac);
                 await kupacRepository.UpdateKupacAsync(kupacViewModel);
+                await unitOfWork.Kupac.SaveAsync();
                 return RedirectToAction("Index");
             }
             return View(kupac);
@@ -124,6 +126,7 @@ namespace WebNarudzba.Controllers
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
             await kupacRepository.DeleteKupacAsync(id);
+            await unitOfWork.Kupac.SaveAsync();
             return RedirectToAction("Index");
         }
 

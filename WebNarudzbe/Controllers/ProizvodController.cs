@@ -85,6 +85,7 @@ namespace WebNarudzba.Controllers
             {
                 Proizvod proizvodViewModel = Mapper.Map<ProizvodDTO, Proizvod>(proizvod);
                 await proizvodRepository.InsertProizvodAsync(proizvodViewModel);
+                await unitOfWork.Proizvod.SaveAsync();
                 return RedirectToAction("Index");
             }
 
@@ -118,6 +119,7 @@ namespace WebNarudzba.Controllers
                 
                 Proizvod proizvodViewModel = Mapper.Map<ProizvodDTO, Proizvod>(proizvod);
                 await proizvodRepository.UpdateProizvodAsync(proizvodViewModel);
+                await unitOfWork.Proizvod.SaveAsync();
                 return RedirectToAction("Index");
             }
             ViewBag.Dobavljac_ID = new SelectList(db.Dobavljac, "ID", "Naziv", proizvod.Dobavljac_ID);
@@ -138,7 +140,7 @@ namespace WebNarudzba.Controllers
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
             await proizvodRepository.DeleteProizvodAsync(id);
-
+            await unitOfWork.Proizvod.SaveAsync();
             return RedirectToAction("Index");
         }
 
