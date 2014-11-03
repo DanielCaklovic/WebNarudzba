@@ -19,15 +19,15 @@ namespace Repository
         ///<remarks>
         ///CRUD - create(insert),read(get),update,delete
         ///</remarks>
-        Task<List<Dobavljac>> GetAsyncDobavljaci(); 
-        Task<Dobavljac> GetAsyncDobavljacByID(int dobavljacID);
-        Task InsertAsyncDobavljac(Dobavljac dobavljac); 
-       
-        Task DeleteAsyncDobavljac(int dobavljacID); 
-        
-        Task UpdateAsyncDobavljac(Dobavljac dobavljac);
-       
-        Task SaveAsyncDobavljac();
+        Task<List<Dobavljac>> GetDobavljaciAsync();
+        Task<Dobavljac> GetDobavljacByIDAsync(int dobavljacID);
+        Task InsertDobavljacAsync(Dobavljac dobavljac);
+
+        Task DeleteDobavljacAsync(int dobavljacID);
+
+        Task UpdateDobavljacAsync(Dobavljac dobavljac);
+
+        Task SaveDobavljacAsync();
 
         
         ///<summary>

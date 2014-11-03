@@ -27,14 +27,14 @@ namespace Repository.Repository
             this.dbSet = this.dbContext.Set<TEntity>();
         }
 
-        public async Task<TEntity> GetByIdAsync(int id)
+        public  Task<TEntity> GetByIdAsync(int id)
         {
-            return await dbSet.FindAsync(id);
+            return  dbSet.FindAsync(id);
         }
 
-        public async Task<List<TEntity>> GetAll()
+        public  Task<List<TEntity>> GetAll()
         {
-            return await dbSet.ToListAsync();
+            return  dbSet.ToListAsync();
         }
 
         public async Task InsertAsync(TEntity entity)

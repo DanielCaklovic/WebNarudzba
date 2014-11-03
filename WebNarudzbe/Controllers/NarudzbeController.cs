@@ -12,6 +12,7 @@ using Repository.Repository;
 using Repository;
 using WebNarudzbe.Models;
 using AutoMapper;
+using Repository.Interface;
 
 namespace WebNarudzba.Controllers
 {
@@ -30,17 +31,19 @@ namespace WebNarudzba.Controllers
         ///Constructor injection
         /// </remarks>
         private readonly IUnitOfWork unitOfWork;
+        private readonly INarudzbeRepository narudzbeRepository;
 
-        public NarudzbeController(IUnitOfWork unitOfWork)
+        public NarudzbeController(IUnitOfWork unitOfWork,INarudzbeRepository narudzbeRepository)
         {
             this.unitOfWork = unitOfWork;
+            this.narudzbeRepository = narudzbeRepository;
         }
 
 
         // GET: Narudzbe
         public async Task<ActionResult> Index()
         {
-            IList<Narudzbe> narudzbe = await unitOfWork.Narudzbe.GetNarudzbeAsync();
+            IList<Narudzbe> narudzbe = await narudzbeRepository.GetNarudzbeAsync();
             IList<NarudzbeDTO> narudzbeViewModel = Mapper.Map<IList<Narudzbe>, IList<NarudzbeDTO>>(narudzbe);
             return View(narudzbeViewModel);
         }
@@ -49,7 +52,7 @@ namespace WebNarudzba.Controllers
         public async Task<ActionResult> Details(int narudzbeID, int proizvodID, int kupacID)
         {
 
-            Narudzbe narudzbe = await unitOfWork.Narudzbe.GetNarudzbeByIdAsync(narudzbeID, proizvodID, kupacID);
+            Narudzbe narudzbe = await narudzbeRepository.GetNarudzbeByIdAsync(narudzbeID, proizvodID, kupacID);
             NarudzbeDTO narudzbeViewModel = Mapper.Map<Narudzbe, NarudzbeDTO>(narudzbe);
             if (narudzbe == null)
             {
@@ -79,7 +82,7 @@ namespace WebNarudzba.Controllers
             if (ModelState.IsValid)
             {
                 Narudzbe narudzbeViewModel = Mapper.Map<NarudzbeDTO, Narudzbe>(narudzbe);
-                await unitOfWork.Narudzbe.InsertNarudzbeAsync(narudzbeViewModel);
+                await narudzbeRepository.InsertNarudzbeAsync(narudzbeViewModel);
                 return RedirectToAction("Index");
             }
 
@@ -92,7 +95,7 @@ namespace WebNarudzba.Controllers
         public async Task<ActionResult> Edit(int narudzbeID, int proizvodID, int kupacID)
         {
 
-            Narudzbe narudzbe = await unitOfWork.Narudzbe.GetNarudzbeByIdAsync(narudzbeID, proizvodID, kupacID);
+            Narudzbe narudzbe = await narudzbeRepository.GetNarudzbeByIdAsync(narudzbeID, proizvodID, kupacID);
             NarudzbeDTO narudzbeViewModel = Mapper.Map<Narudzbe, NarudzbeDTO>(narudzbe);
             if (narudzbe == null)
             {
@@ -113,7 +116,7 @@ namespace WebNarudzba.Controllers
             if (ModelState.IsValid)
             {
                 Narudzbe narudzbeViewModel = Mapper.Map<NarudzbeDTO, Narudzbe>(narudzbe);
-                await unitOfWork.Narudzbe.UpdateNarudzbeAsync(narudzbeViewModel);
+                await narudzbeRepository.UpdateNarudzbeAsync(narudzbeViewModel);
                 return RedirectToAction("Index");
             }
             ViewBag.KupacID = new SelectList(db.Kupac, "ID", "Ime", narudzbe.KupacID);
@@ -125,7 +128,7 @@ namespace WebNarudzba.Controllers
         public async Task<ActionResult> Delete(int narudzbeID, int proizvodID, int kupacID)
         {
 
-            await unitOfWork.Narudzbe.DeleteNarudzbeAsync(narudzbeID, proizvodID, kupacID);
+            await narudzbeRepository.DeleteNarudzbeAsync(narudzbeID, proizvodID, kupacID);
             return RedirectToAction("Index");
         }
 
@@ -135,7 +138,7 @@ namespace WebNarudzba.Controllers
         public async Task<ActionResult> DeleteConfirmed(int narudzbeID, int proizvodID, int kupacID)
         {
 
-            await unitOfWork.Narudzbe.DeleteNarudzbeAsync(narudzbeID, proizvodID, kupacID);
+            await narudzbeRepository.DeleteNarudzbeAsync(narudzbeID, proizvodID, kupacID);
             return RedirectToAction("Index");
         }
 
@@ -143,7 +146,7 @@ namespace WebNarudzba.Controllers
         {
             if (disposing)
             {
-                unitOfWork.Narudzbe.Dispose();
+                narudzbeRepository.Dispose();
             }
             base.Dispose(disposing);
         }

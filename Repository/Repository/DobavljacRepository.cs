@@ -31,19 +31,19 @@ namespace Repository
         ///<remarks>
         ///ASYNC - AWAIT
         /// </remarks>
-        
-        public async Task<List<Dobavljac>> GetAsyncDobavljaci()
+
+        public Task<List<Dobavljac>> GetDobavljaciAsync()
         {
-            return await context.Dobavljac.ToListAsync();
+            return  context.Dobavljac.ToListAsync();
         }
 
-        public async Task InsertAsyncDobavljac(Dobavljac dobavljac)
+        public async Task InsertDobavljacAsync(Dobavljac dobavljac)
         {
             context.Dobavljac.Add(dobavljac);
             await context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsyncDobavljac(int dobavljacID)
+        public async Task DeleteDobavljacAsync(int dobavljacID)
         {
             Dobavljac dobavljac = await context.Dobavljac.FindAsync(dobavljacID);
             context.Dobavljac.Remove(dobavljac);
@@ -52,20 +52,20 @@ namespace Repository
         }
 
 
-        public async Task UpdateAsyncDobavljac(Dobavljac dobavljac)
+        public async Task UpdateDobavljacAsync(Dobavljac dobavljac)
         {
             context.Entry(dobavljac).State = System.Data.Entity.EntityState.Modified;
             await context.SaveChangesAsync();
         }
 
-               
-        public async Task<Dobavljac> GetAsyncDobavljacByID(int dobavljacID)
+
+        public Task<Dobavljac> GetDobavljacByIDAsync(int dobavljacID)
         {
-            return await context.Dobavljac.FindAsync(dobavljacID);
+            return  context.Dobavljac.FindAsync(dobavljacID);
         }
 
 
-        public async Task SaveAsyncDobavljac()
+        public async Task SaveDobavljacAsync()
         {
             await context.SaveChangesAsync();
         }

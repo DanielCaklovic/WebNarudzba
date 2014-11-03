@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Repository.Interface;
+using System.Data.Entity;
+using DAL.Model;
 
 namespace Repository.Repository
 {
@@ -15,46 +17,49 @@ namespace Repository.Repository
         
         private WebNarudzbaContext context;
 
-        public KupacRepository(WebNarudzbaContext context) 
+        public KupacRepository(WebNarudzbaContext context)
         {
             this.context = context;
         }
-
-        public IEnumerable<DAL.Model.Kupac> GetKupci()
-        {
-            return context.Kupac.ToList();
-        }
-
-        public DAL.Model.Kupac GetKupacByID(int kupacID)
-        {
-            return context.Kupac.Find(kupacID);
-        }
-
-        public void InsertKupac(DAL.Model.Kupac kupac)
-        {
-            context.Kupac.Add(kupac);
-        }
-
-        public void DeleteKupac(int kupacID)
-        {
-            DAL.Model.Kupac kupac = context.Kupac.Find(kupacID);
-            context.Kupac.Remove(kupac);
-        }
-
-        public void UpdateKupac(DAL.Model.Kupac kupac)
-        {
-            context.Entry(kupac).State = System.Data.Entity.EntityState.Modified;
-        }
-
-        public void Save()
-        {
-            context.SaveChanges();
-        }
-
         public void Dispose()
         {
             context.Dispose();
             GC.SuppressFinalize(this);
+        }
+
+        public Task<List<DAL.Model.Kupac>> GetKupciAsync()
+        {
+            return context.Kupac.ToListAsync();
+        }
+
+        public Task<DAL.Model.Kupac> GetKupacByIdAsync(int kupacID)
+        {
+            return context.Kupac.FindAsync(kupacID);
+        }
+
+        public async Task InsertKupacAsync(DAL.Model.Kupac kupac)
+        {
+            context.Kupac.Add(kupac);
+            await context.SaveChangesAsync();
+        }
+
+        public async Task DeleteKupacAsync(int kupacID)
+        {
+            Kupac kupac = await context.Kupac.FindAsync(kupacID);
+            context.Kupac.Remove(kupac);
+            await context.SaveChangesAsync();
+
+        }
+
+        public async Task UpdateKupacAsync(DAL.Model.Kupac kupac)
+        {
+            context.Entry(kupac).State = System.Data.Entity.EntityState.Modified;
+            await context.SaveChangesAsync();
+        }
+
+        public async Task SaveKupacAsync()
+        {
+            await context.SaveChangesAsync();
         }
     }
 }

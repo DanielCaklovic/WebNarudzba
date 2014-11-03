@@ -34,5 +34,3 @@ C:\Users\daniel\Documents\Visual Studio 2013\Project\BEKAP\WebNarudzba\Repositor
 C:\Users\daniel\Documents\Visual Studio 2013\Project\BEKAP\WebNarudzba\Repository\obj\Debug\Repository.csprojResolveAssemblyReference.cache
 C:\Users\daniel\Documents\Visual Studio 2013\Project\BEKAP\WebNarudzba\Repository\obj\Debug\Repository.dll
 C:\Users\daniel\Documents\Visual Studio 2013\Project\BEKAP\WebNarudzba\Repository\obj\Debug\Repository.pdb
-C:\Users\daniel\Documents\Visual Studio 2013\Project\BEKAP\WebNarudzba\Repository\bin\Debug\Repository.dll.CodeAnalysisLog.xml
-C:\Users\daniel\Documents\Visual Studio 2013\Project\BEKAP\WebNarudzba\Repository\bin\Debug\Repository.dll.lastcodeanalysissucceeded

@@ -12,6 +12,7 @@ using Repository.Repository;
 using Repository;
 using WebNarudzbe.Models;
 using AutoMapper;
+using Repository.Interface;
 
 namespace WebNarudzba.Controllers
 {
@@ -28,16 +29,18 @@ namespace WebNarudzba.Controllers
         ///Constructor injection
         /// </remarks>
         private readonly IUnitOfWork unitOfWork;
+        private readonly IKupacRepository kupacRepository;
 
-        public KupacController(IUnitOfWork unitOfWork)
+        public KupacController(IUnitOfWork unitOfWork,IKupacRepository kupacRepository)
         {
             this.unitOfWork = unitOfWork;
+            this.kupacRepository = kupacRepository;
         }
 
         // GET: Kupac
         public async Task<ActionResult> Index()
         {
-            IList<Kupac> kupac = await unitOfWork.Kupac.GetAll();
+            IList<Kupac> kupac = await kupacRepository.GetKupciAsync();
             IList<KupacDTO> kupacViewModel = Mapper.Map<IList<Kupac>, IList<KupacDTO>>(kupac);
             return View(kupacViewModel);
         }
@@ -46,7 +49,7 @@ namespace WebNarudzba.Controllers
         public async Task<ActionResult> Details(int id)
         {
 
-            Kupac kupac = await unitOfWork.Kupac.GetByIdAsync(id);
+            Kupac kupac = await kupacRepository.GetKupacByIdAsync(id);
             KupacDTO kupacViewModel = Mapper.Map<Kupac, KupacDTO>(kupac);
             if (kupac == null)
             {
@@ -71,7 +74,7 @@ namespace WebNarudzba.Controllers
             if (ModelState.IsValid)
             {
                 Kupac kupacViewModel = Mapper.Map<KupacDTO, Kupac>(kupac);
-                await unitOfWork.Kupac.InsertAsync(kupacViewModel);
+                await kupacRepository.InsertKupacAsync(kupacViewModel);
                 return RedirectToAction("Index");
             }
 
@@ -82,7 +85,7 @@ namespace WebNarudzba.Controllers
         public async Task<ActionResult> Edit(int id)
         {
 
-            Kupac kupac = await unitOfWork.Kupac.GetByIdAsync(id);
+            Kupac kupac = await kupacRepository.GetKupacByIdAsync(id);
             KupacDTO kupacViewModel = Mapper.Map<Kupac, KupacDTO>(kupac);
             if (kupac == null)
             {
@@ -101,7 +104,7 @@ namespace WebNarudzba.Controllers
             if (ModelState.IsValid)
             {
                 Kupac kupacViewModel = Mapper.Map<KupacDTO, Kupac>(kupac);
-                await unitOfWork.Kupac.UpdateAsync(kupacViewModel);
+                await kupacRepository.UpdateKupacAsync(kupacViewModel);
                 return RedirectToAction("Index");
             }
             return View(kupac);
@@ -111,8 +114,7 @@ namespace WebNarudzba.Controllers
         public async Task<ActionResult> Delete(int id)
         {
 
-            Kupac kupac = await unitOfWork.Kupac.GetByIdAsync(id);
-            await unitOfWork.Kupac.DeleteAsync(kupac);
+            await kupacRepository.DeleteKupacAsync(id);
             return RedirectToAction("Index");
         }
 
@@ -121,8 +123,7 @@ namespace WebNarudzba.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Kupac kupac = await unitOfWork.Kupac.GetByIdAsync(id);
-            await unitOfWork.Kupac.DeleteAsync(kupac);
+            await kupacRepository.DeleteKupacAsync(id);
             return RedirectToAction("Index");
         }
 
@@ -130,7 +131,7 @@ namespace WebNarudzba.Controllers
         {
             if (disposing)
             {
-                unitOfWork.Kupac.Dispose();
+                kupacRepository.Dispose();
             }
             base.Dispose(disposing);
         }

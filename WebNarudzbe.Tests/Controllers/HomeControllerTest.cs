@@ -24,6 +24,7 @@ namespace WebNarudzbe.Tests.Controllers
     {
         private Mock<IUnitOfWork> IUnitOfWork;
         private Mock<IGenericRepository<Dobavljac>> genericRepository;
+        private Mock<DobavljacRepository> dobavljacRepository;
 
         private DobavljacController dobavljacController;
 
@@ -31,6 +32,7 @@ namespace WebNarudzbe.Tests.Controllers
         public void Init() 
         {
                 IUnitOfWork = new Mock<IUnitOfWork>();
+                dobavljacRepository = new Mock<DobavljacRepository>();
                 
 
         }
@@ -78,7 +80,7 @@ namespace WebNarudzbe.Tests.Controllers
         public void TestControllerDobavljac()
         {
             //Arrange
-            dobavljacController = new DobavljacController(IUnitOfWork.Object);
+            dobavljacController = new DobavljacController(IUnitOfWork.Object, dobavljacRepository.Object);
             Dobavljac dobavljac = new Dobavljac();
             dobavljac.ID = 1;
             dobavljac.Adresa = "test adress";
@@ -107,7 +109,7 @@ namespace WebNarudzbe.Tests.Controllers
         public void TestInsertDobavljac()
         {
             //Arrange
-            dobavljacController = new DobavljacController(IUnitOfWork.Object);
+            dobavljacController = new DobavljacController(IUnitOfWork.Object, dobavljacRepository.Object);
             Dobavljac dobavljac = new Dobavljac();
             dobavljac.ID = 100;
             dobavljac.Adresa = "test adress";

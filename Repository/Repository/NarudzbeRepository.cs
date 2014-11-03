@@ -23,14 +23,14 @@ namespace Repository.Repository
 
 
 
-        public async Task<List<DAL.Model.Narudzbe>> GetNarudzbeAsync()
+        public  Task<List<DAL.Model.Narudzbe>> GetNarudzbeAsync()
         {
-            return await context.Narudzbe.ToListAsync();
+            return  context.Narudzbe.ToListAsync();
         }
 
-        public async Task<DAL.Model.Narudzbe> GetNarudzbeByIdAsync(int NarudzbeID, int ProizvodID, int KupacID)
+        public  Task<DAL.Model.Narudzbe> GetNarudzbeByIdAsync(int NarudzbeID, int ProizvodID, int KupacID)
         {
-            return await context.Narudzbe.FindAsync(NarudzbeID,ProizvodID,KupacID);
+            return  context.Narudzbe.FindAsync(NarudzbeID,ProizvodID,KupacID);
         }
 
         public async Task InsertNarudzbeAsync(DAL.Model.Narudzbe narudzbe)

@@ -13,6 +13,7 @@ using Repository;
 using AutoMapper;
 using WebNarudzbe.Mappings;
 using WebNarudzbe.Models;
+using Repository.Interface;
 
 namespace WebNarudzba.Controllers
 {
@@ -30,10 +31,12 @@ namespace WebNarudzba.Controllers
         ///Constructor injection
         /// </remarks>
         private readonly IUnitOfWork unitOfWork;
+        private readonly IProizvodRepository proizvodRepository;
 
-        public ProizvodController(IUnitOfWork unitOfWork)
+        public ProizvodController(IUnitOfWork unitOfWork, IProizvodRepository proizvodRepository)
         {
             this.unitOfWork = unitOfWork;
+            this.proizvodRepository = proizvodRepository;
         }
 
 
@@ -45,7 +48,7 @@ namespace WebNarudzba.Controllers
             ///return View(await proizvod.ToListAsync());
             ///</c>
 
-            IList<Proizvod> proizvod = await unitOfWork.Proizvod.GetAll();
+            IList<Proizvod> proizvod = await proizvodRepository.GetProizvodiAsync();
             IList<ProizvodDTO> proizvodViewModel = Mapper.Map<IList<Proizvod>, IList<ProizvodDTO>>(proizvod);
             return View(proizvodViewModel);
         }
@@ -54,7 +57,7 @@ namespace WebNarudzba.Controllers
         public async Task<ActionResult> Details(int id)
         {
 
-            Proizvod proizvod = await unitOfWork.Proizvod.GetByIdAsync(id);
+            Proizvod proizvod = await proizvodRepository.GetProizvodByIdAsync(id);
             ProizvodDTO proizvodViewModel = Mapper.Map<Proizvod, ProizvodDTO>(proizvod);
             if (proizvod == null)
             {
@@ -81,7 +84,7 @@ namespace WebNarudzba.Controllers
             if (ModelState.IsValid)
             {
                 Proizvod proizvodViewModel = Mapper.Map<ProizvodDTO, Proizvod>(proizvod);
-                await unitOfWork.Proizvod.InsertAsync(proizvodViewModel);
+                await proizvodRepository.InsertProizvodAsync(proizvodViewModel);
                 return RedirectToAction("Index");
             }
 
@@ -93,7 +96,7 @@ namespace WebNarudzba.Controllers
         public async Task<ActionResult> Edit(int id)
         {
 
-            Proizvod proizvod = await unitOfWork.Proizvod.GetByIdAsync(id);
+            Proizvod proizvod = await proizvodRepository.GetProizvodByIdAsync(id);
             ProizvodDTO proizvodViewModel = Mapper.Map<Proizvod, ProizvodDTO>(proizvod);
             if (proizvod == null)
             {
@@ -114,7 +117,7 @@ namespace WebNarudzba.Controllers
             {
                 
                 Proizvod proizvodViewModel = Mapper.Map<ProizvodDTO, Proizvod>(proizvod);
-                await unitOfWork.Proizvod.UpdateAsync(proizvodViewModel);
+                await proizvodRepository.UpdateProizvodAsync(proizvodViewModel);
                 return RedirectToAction("Index");
             }
             ViewBag.Dobavljac_ID = new SelectList(db.Dobavljac, "ID", "Naziv", proizvod.Dobavljac_ID);
@@ -125,8 +128,7 @@ namespace WebNarudzba.Controllers
         public async Task<ActionResult> Delete(int id)
         {
 
-            Proizvod proizvod = await unitOfWork.Proizvod.GetByIdAsync(id);
-            await unitOfWork.Proizvod.DeleteAsync(proizvod);
+            await proizvodRepository.DeleteProizvodAsync(id);
             return RedirectToAction("Index");
         }
 
@@ -135,8 +137,7 @@ namespace WebNarudzba.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Proizvod proizvod = await unitOfWork.Proizvod.GetByIdAsync(id);
-            await unitOfWork.Proizvod.DeleteAsync(proizvod);
+            await proizvodRepository.DeleteProizvodAsync(id);
 
             return RedirectToAction("Index");
         }
@@ -145,7 +146,7 @@ namespace WebNarudzba.Controllers
         {
             if (disposing)
             {
-                unitOfWork.Proizvod.Dispose();
+                proizvodRepository.Dispose();
             }
             base.Dispose(disposing);
         }

@@ -11,6 +11,8 @@ namespace WebNarudzbe.App_Start
     using Ninject;
     using Ninject.Web.Common;
     using Repository;
+    using Repository.Interface;
+    using Repository.Repository;
     public static class NinjectWebCommon 
     {
         private static readonly Bootstrapper bootstrapper = new Bootstrapper();
@@ -65,6 +67,10 @@ namespace WebNarudzbe.App_Start
             ///Povezivanje interfacea i klase
             ///</remarks>
             kernel.Bind<IUnitOfWork>().To<UnitOfWork>();
+            kernel.Bind<IDobavljacRepository>().To<DobavljacRepository>();
+            kernel.Bind<IKupacRepository>().To<KupacRepository>();
+            kernel.Bind<IProizvodRepository>().To<ProizvodRepository>();
+            kernel.Bind<INarudzbeRepository>().To<NarudzbeRepository>();
         }        
     }
 }

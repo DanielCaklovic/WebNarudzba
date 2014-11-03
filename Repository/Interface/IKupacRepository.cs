@@ -14,12 +14,20 @@ namespace Repository.Interface
         ///Deklaracija metoda za CRUD operacije
         ///Repository - veza između DAL i BLL
         /// </summary>
-       
-        IEnumerable<Kupac> GetKupci();
-        Kupac GetKupacByID(int kupacID);
-        void InsertKupac(Kupac kupac);
-        void DeleteKupac(int kupacID);
-        void UpdateKupac(Kupac kupac);
-        void Save();
+
+        Task<List<Kupac>> GetKupciAsync();
+        Task<Kupac> GetKupacByIdAsync(int kupacID);
+        Task InsertKupacAsync(Kupac kupac);
+        Task DeleteKupacAsync(int kupacID);
+        Task UpdateKupacAsync(Kupac kupac);
+        Task SaveKupacAsync();
+
+
+        //IEnumerable<Kupac> GetKupci();
+        //Kupac GetKupacByID(int kupacID);
+        //void InsertKupac(Kupac kupac);
+        //void DeleteKupac(int kupacID);
+        //void UpdateKupac(Kupac kupac);
+        //void Save();
     }
 }

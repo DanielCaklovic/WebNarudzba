@@ -18,6 +18,7 @@ namespace WebNarudzba.Controllers
     public class DobavljacController : Controller
     {
         private WebNarudzbaContext db = new WebNarudzbaContext();
+        
 
         ///<remarks>
         /// Bez UoW - private GenericRepository<Kupac> genericRepository = new GenericRepository<Kupac>(new WebNarudzbaContext());
@@ -30,10 +31,12 @@ namespace WebNarudzba.Controllers
         /// </remarks>
         
         private readonly IUnitOfWork unitOfWork;
+        private readonly IDobavljacRepository dobavljacRepository;
 
-        public DobavljacController(IUnitOfWork unitOfWork)
+        public DobavljacController(IUnitOfWork unitOfWork, IDobavljacRepository dobavljacRepository)
         {
             this.unitOfWork = unitOfWork;
+            this.dobavljacRepository = dobavljacRepository;
         }
 
         // GET: Dobavljac
@@ -59,7 +62,7 @@ namespace WebNarudzba.Controllers
             ///</example>
             #endregion            
 
-            IList<Dobavljac> dobavljac = await unitOfWork.Dobavljac.GetAll();
+            IList<Dobavljac> dobavljac = await dobavljacRepository.GetDobavljaciAsync();
             IList<DobavljacDTO> dobavljacViewModel = Mapper.Map<IList<Dobavljac>,IList<DobavljacDTO>>(dobavljac);
 
             return View(dobavljacViewModel);
@@ -70,7 +73,7 @@ namespace WebNarudzba.Controllers
         public async Task<ActionResult> Details(int id)
         {
 
-            Dobavljac dobavljac = await unitOfWork.Dobavljac.GetByIdAsync(id);
+            Dobavljac dobavljac = await dobavljacRepository.GetDobavljacByIDAsync(id);
             DobavljacDTO dobavljacViewModel = Mapper.Map<Dobavljac, DobavljacDTO>(dobavljac);
             if (dobavljac == null)
             {
@@ -109,7 +112,7 @@ namespace WebNarudzba.Controllers
             if (ModelState.IsValid)
             {
                 Dobavljac dobavljacViewModel = Mapper.Map<DobavljacDTO, Dobavljac>(dobavljac);
-                await unitOfWork.Dobavljac.InsertAsync(dobavljacViewModel);
+                await dobavljacRepository.InsertDobavljacAsync(dobavljacViewModel);
                 return RedirectToAction("Index");
             }
 
@@ -120,7 +123,7 @@ namespace WebNarudzba.Controllers
         public async Task<ActionResult> Edit(int id)
         {
 
-            Dobavljac dobavljac = await unitOfWork.Dobavljac.GetByIdAsync(id);
+            Dobavljac dobavljac = await dobavljacRepository.GetDobavljacByIDAsync(id);
             DobavljacDTO dobavljacViewModel = Mapper.Map<Dobavljac, DobavljacDTO>(dobavljac);
             if (dobavljac == null)
             {
@@ -139,7 +142,7 @@ namespace WebNarudzba.Controllers
             if (ModelState.IsValid)
             {
                 Dobavljac dobavljacViewModel = Mapper.Map<DobavljacDTO, Dobavljac>(dobavljac);
-                await unitOfWork.Dobavljac.UpdateAsync(dobavljacViewModel);
+                await dobavljacRepository.UpdateDobavljacAsync(dobavljacViewModel);
                 return RedirectToAction("Index");
             }
             return View(dobavljac);
@@ -148,8 +151,7 @@ namespace WebNarudzba.Controllers
         // GET: Dobavljac/Delete/5
         public async Task<ActionResult> Delete(int id)
         {
-            Dobavljac dobavljac = await unitOfWork.Dobavljac.GetByIdAsync(id);
-            await unitOfWork.Dobavljac.DeleteAsync(dobavljac);
+            await dobavljacRepository.DeleteDobavljacAsync(id);
             return RedirectToAction("Index");
         
         }
@@ -159,8 +161,7 @@ namespace WebNarudzba.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Dobavljac dobavljac = await unitOfWork.Dobavljac.GetByIdAsync(id);
-            await unitOfWork.Dobavljac.DeleteAsync(dobavljac);
+            await dobavljacRepository.DeleteDobavljacAsync(id);
             return RedirectToAction("Index");
         }
 
@@ -168,7 +169,7 @@ namespace WebNarudzba.Controllers
         {
             if (disposing)
             {
-                unitOfWork.Dobavljac.Dispose();
+                dobavljacRepository.Dispose();
             }
             base.Dispose(disposing);
         }
